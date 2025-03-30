@@ -1,0 +1,15 @@
+{
+    "name": "onenitrox-nt-tools",
+    "version": "1.0.0",
+    "description": "Nitro Type Tools web interface",
+    "scripts": {
+      "start": "node server.js",
+      "build": "echo 'No build step required for static site'"
+    },
+    "dependencies": {
+      "express": "^4.18.2"
+    },
+    "engines": {
+      "node": ">=16.0.0"
+    }
+  }
