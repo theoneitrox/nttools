@@ -107,47 +107,58 @@ async function generateAccounts() {
     responseDiv.className = "alert";
     accountsList.innerHTML = "";
     
-    let successfulAccounts = [];
-    let failedAccounts = [];
-    
+    // Create an array of promises for parallel processing
+    const accountPromises = [];
     for (let i = 0; i < accountCount; i++) {
-        // Generate random username (6-12 chars) and password (8-12 chars)
         const username = generateRandomString(6 + Math.floor(Math.random() * 7));
         const password = generateRandomString(8 + Math.floor(Math.random() * 5));
         
-        const result = await createAccount(username, password, wpm);
+        accountPromises.push(createAccount(username, password, wpm));
+    }
+    
+    try {
+        // Run all account creations in parallel
+        const results = await Promise.allSettled(accountPromises);
         
-        if (result.success) {
-            successfulAccounts.push(`${result.username}:${result.password}`);
-        } else {
-            failedAccounts.push(`Failed to create ${username}: ${result.error}`);
+        const successfulAccounts = [];
+        const failedAccounts = [];
+        
+        results.forEach((result, i) => {
+            if (result.status === 'fulfilled' && result.value.success) {
+                successfulAccounts.push(`${result.value.username}:${result.value.password}`);
+            } else {
+                const error = result.reason?.error || result.value?.error || "Unknown error";
+                failedAccounts.push(`Account ${i+1}: ${error}`);
+            }
+        });
+        
+        // Display results
+        if (successfulAccounts.length > 0) {
+            accountsList.innerHTML = `
+                <h3>Successfully Created Accounts (${successfulAccounts.length})</h3>
+                <div class="alert alert-success">
+                    <p>${successfulAccounts.length} accounts created successfully!</p>
+                </div>
+                <pre>${successfulAccounts.join('\n')}</pre>
+            `;
         }
         
-        // Update progress
-        responseDiv.innerHTML = `Generated ${i+1}/${accountCount} accounts...`;
+        if (failedAccounts.length > 0) {
+            accountsList.innerHTML += `
+                <h3>Failed Accounts (${failedAccounts.length})</h3>
+                <div class="alert alert-danger">
+                    <p>${failedAccounts.length} accounts failed to create.</p>
+                </div>
+                <pre>${failedAccounts.slice(0, 10).join('\n')}</pre>
+                ${failedAccounts.length > 10 ? `<p>+ ${failedAccounts.length - 10} more failures...</p>` : ''}
+            `;
+        }
+        
+        responseDiv.innerHTML = `Completed! ${successfulAccounts.length} succeeded, ${failedAccounts.length} failed.`;
+        responseDiv.className = successfulAccounts.length > 0 ? "alert alert-success" : "alert alert-danger";
+        
+    } catch (error) {
+        responseDiv.innerHTML = `Error during parallel processing: ${error.message}`;
+        responseDiv.className = "alert alert-danger";
     }
-    
-    // Display results
-    if (successfulAccounts.length > 0) {
-        accountsList.innerHTML = `
-            <h3>Successfully Created Accounts</h3>
-            <div class="alert alert-success">
-                <p>${successfulAccounts.length} accounts created successfully!</p>
-            </div>
-            <pre>${successfulAccounts.join('\n')}</pre>
-        `;
-    }
-    
-    if (failedAccounts.length > 0) {
-        accountsList.innerHTML += `
-            <h3>Failed Accounts</h3>
-            <div class="alert alert-danger">
-                <p>${failedAccounts.length} accounts failed to create.</p>
-            </div>
-            <pre>${failedAccounts.join('\n')}</pre>
-        `;
-    }
-    
-    responseDiv.innerHTML = `Completed! ${successfulAccounts.length} succeeded, ${failedAccounts.length} failed.`;
-    responseDiv.className = successfulAccounts.length > 0 ? "alert alert-success" : "alert alert-danger";
 }
