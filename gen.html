@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneNitroX NT Tools</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #166088;
+            --accent: #4fc3f7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #28a745;
+            --danger: #dc3545;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f5f5f5;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            border-bottom: 2px solid var(--accent);
+        }
+        
+        main {
+            padding: 2rem 0;
+            min-height: calc(100vh - 180px);
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+        
+        h2 {
+            color: var(--secondary);
+            margin: 1rem 0;
+            font-size: 1.5rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .tool-card h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .tool-card p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 2rem;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        pre {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">OneNitroX Nitro Type Tools</a>
+                <ul class="nav-links">
+                    <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
+                    <li><a href="#" class="nav-link" data-page="account-gen">Account Generator</a></li>
+                    <li><a href="#" class="nav-link" data-page="tool1">(Upcoming Tool)</a></li>
+                    <li><a href="#" class="nav-link" data-page="tool2">(Upcoming Tool)</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <!-- Home Page -->
+        <div class="page active" id="home">
+            <h1>Welcome to TypeTools</h1>
+            <p>Your ultimate Nitro Type companion with powerful tools to enhance your typing experience.</p>
+            
+            <div class="card">
+                <h2>Available Tools</h2>
+                
+                <div class="tool-card">
+                    <h3>Account Generator</h3>
+                    <p>Create multiple Nitro Type accounts instantly with random usernames and passwords.</p>
+                    <a href="#" class="btn" data-page="account-gen">Use Tool</a>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>More tools coming soon!</h3>
+                    <p>More tools coming soon!</p>
+                    <a href="#" class="btn" data-page="tool1">(Upcoming Tool)</a>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>More tools coming soon!</h3>
+                    <p>More tools coming soon!</p>
+                    <a href="#" class="btn" data-page="tool2">(Upcoming Tool)</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Account Generator Page -->
+        <div class="page" id="account-gen">
+            <h1>Account Generator</h1>
+            <p>Create multiple Nitro Type accounts with random credentials.</p>
+            
+            <div class="card">
+                <div class="form-group">
+                    <label for="accountCount">Number of Accounts:</label>
+                    <input type="number" id="accountCount" min="1" max="20" value="5">
+                </div>
+                
+                <div class="form-group">
+                    <label for="wpm">Typing Speed (WPM):</label>
+                    <input type="number" id="wpm" min="30" max="150" value="80">
+                </div>
+                
+                <button id="generateBtn" class="btn btn-block">Generate Accounts</button>
+                
+                <div id="response" class="alert" style="display: none;"></div>
+                <div id="accountsList"></div>
+            </div>
+        </div>
+        
+        <!-- Speed Analyzer Page (Placeholder) -->
+        <div class="page" id="tool1">
+            <h1>More tools coming soon!</h1>
+            <p>(Coming Soon)</p>
+            
+            <div class="card">
+                <p>Tool under development. Check back later!</p>
+            </div>
+        </div>
+        
+        <!-- Race Simulator Page (Placeholder) -->
+        <div class="page" id="tool2">
+            <h1>More tools coming soon!</h1>
+            <p>(Coming Soon)</p>
+            
+            <div class="card">
+                <p>Tool under development. Check back later!</p>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 OneNitroX All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Page Navigation for header links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Update active nav link
+                document.querySelectorAll('.nav-link').forEach(navLink => {
+                    navLink.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Show selected page
+                const pageId = this.getAttribute('data-page');
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById(pageId).classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('.tool-card .btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const pageId = this.getAttribute('data-page');
+                
+                // Update active nav link
+                document.querySelectorAll('.nav-link').forEach(navLink => {
+                    navLink.classList.remove('active');
+                    if (navLink.getAttribute('data-page') === pageId) {
+                        navLink.classList.add('active');
+                    }
+                });
+                
+                // Show selected page
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById(pageId).classList.add('active');
+            });
+        });
+        
+        document.getElementById('generateBtn').addEventListener('click', generateAccounts);
+        
+        function generateRandomString(length) {
+            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+        
+        async function createAccount(username, password, wpm) {
+            const url = 'https://www.nitrotype.com/api/v2/auth/register/username';
+            const data = {
+                "acceptPolicy": "on",
+                "avgAcc": 98,
+                "avgSpeed": parseInt(wpm),
+                "carID": 9,
+                "password": password,
+                "qualifying": 1, 
+                "raceSounds": "none",
+                "receiveContact": "",
+                "tz": "America/Indianapolis",
+                "username": username
+            };
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+                
+                const responseData = await response.json();
+                
+                if (response.status === 200) {
+                    return { success: true, username: responseData.results.username, password: password };
+                } else {
+                    return { 
+                        success: false, 
+                        error: responseData.results?.username?.[0] || 
+                              responseData.results?.password?.[0] || 
+                              responseData.results?.avgSpeed?.[0] || 
+                              "Unknown error" 
+                    };
+                }
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+        
+        async function generateAccounts() {
+            const accountCount = document.getElementById('accountCount').value;
+            const wpm = document.getElementById('wpm').value;
+            const responseDiv = document.getElementById('response');
+            const accountsList = document.getElementById('accountsList');
+            
+            responseDiv.style.display = 'block';
+            responseDiv.innerHTML = "Generating accounts...";
+            responseDiv.className = "alert";
+            accountsList.innerHTML = "";
+            
+            let successfulAccounts = [];
+            let failedAccounts = [];
+            
+            for (let i = 0; i < accountCount; i++) {
+                const username = generateRandomString(6 + Math.floor(Math.random() * 7));
+                const password = generateRandomString(8 + Math.floor(Math.random() * 5));
+                
+                const result = await createAccount(username, password, wpm);
+                
+                if (result.success) {
+                    successfulAccounts.push(`${result.username}:${result.password}`);
+                } else {
+                    failedAccounts.push(`Failed to create ${username}: ${result.error}`);
+                }
+                
+                // Update progress
+                responseDiv.innerHTML = `Generated ${i+1}/${accountCount} accounts...`;
+            }
+            
+            // Display results
+            if (successfulAccounts.length > 0) {
+                accountsList.innerHTML = `
+                    <h3>Successfully Created Accounts</h3>
+                    <div class="alert alert-success">
+                        <p>${successfulAccounts.length} accounts created successfully!</p>
+                    </div>
+                    <pre>${successfulAccounts.join('\n')}</pre>
+                `;
+            }
+            
+            if (failedAccounts.length > 0) {
+                accountsList.innerHTML += `
+                    <h3>Failed Accounts</h3>
+                    <div class="alert alert-danger">
+                        <p>${failedAccounts.length} accounts failed to create.</p>
+                    </div>
+                    <pre>${failedAccounts.join('\n')}</pre>
+                `;
+            }
+            
+            responseDiv.innerHTML = `Completed! ${successfulAccounts.length} succeeded, ${failedAccounts.length} failed.`;
+            responseDiv.className = successfulAccounts.length > 0 ? "alert alert-success" : "alert alert-danger";
+        }
+    </script>
+</body>
+</html>
