@@ -9,7 +9,7 @@ app.use(express.static(path.join(__dirname, '/')));
 
 // Handle all routes by serving index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'gen.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.listen(port, () => {
