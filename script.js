@@ -44,13 +44,60 @@ document.querySelectorAll('.tool-card .btn').forEach(btn => {
 // Account Generator Functionality
 document.getElementById('generateBtn').addEventListener('click', generateAccounts);
 
-function generateRandomString(length) {
-    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+function generateRandomString(length, includeSymbols = true) {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const symbols = '!@#$%^&*';
     let result = '';
     for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
+        if (includeSymbols && i === length - 1) {
+            // Ensure at least one symbol in password
+            result += symbols.charAt(Math.floor(Math.random() * symbols.length));
+        } else {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
     }
     return result;
+}
+
+function validateBaseInputs(baseUsername, basePassword) {
+    if (baseUsername && baseUsername.length > 15) {
+        alert("Base username too long! Maximum 15 characters.");
+        return false;
+    }
+    if (basePassword && basePassword.length > 10) {
+        alert("Base password too long! Maximum 10 characters.");
+        return false;
+    }
+    return true;
+}
+
+function generateUsername(base, index) {
+    if (!base) {
+        return generateRandomString(6 + Math.floor(Math.random() * 7), false);
+    }
+    const suffix = `_${index}`;
+    const maxBaseLength = 20 - suffix.length;
+    const finalUsername = `${base.slice(0, maxBaseLength)}${suffix}`;
+    
+    // Final validation check
+    if (finalUsername.length > 20) {
+        alert(`Generated username too long: ${finalUsername}`);
+        return generateRandomString(10, false); // Fallback to random
+    }
+    return finalUsername;
+}
+
+function generatePassword(base) {
+    if (!base) {
+        return generateRandomString(8 + Math.floor(Math.random() * 5));
+    }
+    const availableLength = 20 - base.length;
+    if (availableLength <= 0) {
+        alert("Password base too long! Falling back to random password.");
+        return generateRandomString(10);
+    }
+    const suffix = generateRandomString(availableLength);
+    return `${base}${suffix}`;
 }
 
 async function createAccount(username, password, wpm) {
@@ -99,38 +146,56 @@ async function createAccount(username, password, wpm) {
 async function generateAccounts() {
     const accountCount = document.getElementById('accountCount').value;
     const wpm = document.getElementById('wpm').value;
+    const baseUsername = document.getElementById('baseUsername').value.trim();
+    const basePassword = document.getElementById('basePassword').value.trim();
     const responseDiv = document.getElementById('response');
     const accountsList = document.getElementById('accountsList');
+    
+    if (!validateBaseInputs(baseUsername, basePassword)) {
+        return;
+    }
     
     responseDiv.style.display = 'block';
     responseDiv.innerHTML = "Generating accounts...";
     responseDiv.className = "alert";
     accountsList.innerHTML = "";
     
-    // Create an array of promises for parallel processing
+    let successfulAccounts = [];
+    let failedAccounts = [];
+    
+    // Create all account promises first
     const accountPromises = [];
     for (let i = 0; i < accountCount; i++) {
-        const username = generateRandomString(6 + Math.floor(Math.random() * 7));
-        const password = generateRandomString(8 + Math.floor(Math.random() * 5));
-        
+        const username = generateUsername(baseUsername, i+1);
+        const password = generatePassword(basePassword);
         accountPromises.push(createAccount(username, password, wpm));
     }
     
     try {
-        // Run all account creations in parallel
-        const results = await Promise.allSettled(accountPromises);
-        
-        const successfulAccounts = [];
-        const failedAccounts = [];
-        
-        results.forEach((result, i) => {
-            if (result.status === 'fulfilled' && result.value.success) {
-                successfulAccounts.push(`${result.value.username}:${result.value.password}`);
-            } else {
-                const error = result.reason?.error || result.value?.error || "Unknown error";
-                failedAccounts.push(`Account ${i+1}: ${error}`);
+        // Process in batches to avoid rate limiting
+        const BATCH_SIZE = 5;
+        for (let i = 0; i < accountPromises.length; i += BATCH_SIZE) {
+            const batch = accountPromises.slice(i, i + BATCH_SIZE);
+            const batchResults = await Promise.allSettled(batch);
+            
+            batchResults.forEach((result) => {
+                if (result.status === 'fulfilled' && result.value.success) {
+                    successfulAccounts.push(`${result.value.username}:${result.value.password}`);
+                } else {
+                    const error = result.reason?.error || result.value?.error || "Unknown error";
+                    failedAccounts.push(error);
+                }
+            });
+            
+            // Update progress
+            const processed = Math.min(i + BATCH_SIZE, accountCount);
+            responseDiv.innerHTML = `Generating accounts... (${processed}/${accountCount} completed)`;
+            
+            // Small delay between batches
+            if (i + BATCH_SIZE < accountPromises.length) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
             }
-        });
+        }
         
         // Display results
         if (successfulAccounts.length > 0) {
@@ -158,7 +223,7 @@ async function generateAccounts() {
         responseDiv.className = successfulAccounts.length > 0 ? "alert alert-success" : "alert alert-danger";
         
     } catch (error) {
-        responseDiv.innerHTML = `Error during parallel processing: ${error.message}`;
+        responseDiv.innerHTML = `Error during account generation: ${error.message}`;
         responseDiv.className = "alert alert-danger";
     }
 }
