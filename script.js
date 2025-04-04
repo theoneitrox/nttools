@@ -2,14 +2,12 @@
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', function(e) {
         e.preventDefault();
-        
-        // Update active nav link
+
         document.querySelectorAll('.nav-link').forEach(navLink => {
             navLink.classList.remove('active');
         });
         this.classList.add('active');
         
-        // Show selected page
         const pageId = this.getAttribute('data-page');
         document.querySelectorAll('.page').forEach(page => {
             page.classList.remove('active');
@@ -24,8 +22,7 @@ document.querySelectorAll('.tool-card .btn').forEach(btn => {
         e.preventDefault();
         
         const pageId = this.getAttribute('data-page');
-        
-        // Update active nav link
+
         document.querySelectorAll('.nav-link').forEach(navLink => {
             navLink.classList.remove('active');
             if (navLink.getAttribute('data-page') === pageId) {
@@ -33,7 +30,6 @@ document.querySelectorAll('.tool-card .btn').forEach(btn => {
             }
         });
         
-        // Show selected page
         document.querySelectorAll('.page').forEach(page => {
             page.classList.remove('active');
         });
@@ -50,7 +46,6 @@ function generateRandomString(length, includeSymbols = true) {
     let result = '';
     for (let i = 0; i < length; i++) {
         if (includeSymbols && i === length - 1) {
-            // Ensure at least one symbol in password
             result += symbols.charAt(Math.floor(Math.random() * symbols.length));
         } else {
             result += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -79,10 +74,9 @@ function generateUsername(base, index) {
     const maxBaseLength = 20 - suffix.length;
     const finalUsername = `${base.slice(0, maxBaseLength)}${suffix}`;
     
-    // Final validation check
     if (finalUsername.length > 20) {
         alert(`Generated username too long: ${finalUsername}`);
-        return generateRandomString(10, false); // Fallback to random
+        return generateRandomString(10, false);
     }
     return finalUsername;
 }
@@ -163,7 +157,6 @@ async function generateAccounts() {
     let successfulAccounts = [];
     let failedAccounts = [];
     
-    // Create all account promises first
     const accountPromises = [];
     for (let i = 0; i < accountCount; i++) {
         const username = generateUsername(baseUsername, i+1);
@@ -172,7 +165,6 @@ async function generateAccounts() {
     }
     
     try {
-        // Process in batches to avoid rate limiting
         const BATCH_SIZE = 5;
         for (let i = 0; i < accountPromises.length; i += BATCH_SIZE) {
             const batch = accountPromises.slice(i, i + BATCH_SIZE);
@@ -186,18 +178,15 @@ async function generateAccounts() {
                     failedAccounts.push(error);
                 }
             });
-            
-            // Update progress
+
             const processed = Math.min(i + BATCH_SIZE, accountCount);
             responseDiv.innerHTML = `Generating accounts... (${processed}/${accountCount} completed)`;
-            
-            // Small delay between batches
+
             if (i + BATCH_SIZE < accountPromises.length) {
                 await new Promise(resolve => setTimeout(resolve, 1000));
             }
         }
         
-        // Display results
         if (successfulAccounts.length > 0) {
             accountsList.innerHTML = `
                 <h3>Successfully Created Accounts (${successfulAccounts.length})</h3>
@@ -227,3 +216,4 @@ async function generateAccounts() {
         responseDiv.className = "alert alert-danger";
     }
 }
+

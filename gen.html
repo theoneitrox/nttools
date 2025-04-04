@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>OneNitroX NT Tools</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">OneNitroX Nitro Type Tools</a>
+                <ul class="nav-links">
+                    <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
+                    <li><a href="#" class="nav-link" data-page="account-gen">Account Generator</a></li>
+                    <li><a href="#" class="nav-link" data-page="tool1">Nitro Type Team Data</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <!-- Home Page -->
+        <div class="page active" id="home">
+            <h1>Welcome to OneNitroX NT Tools</h1>
+            <p>Your ultimate Nitro Type companion with powerful tools to enhance your typing experience.</p>
+            
+            <div class="card">
+                <h2>Available Tools</h2>
+                
+                <div class="tool-card">
+                    <h3>Account Generator</h3>
+                    <p>Create multiple Nitro Type accounts instantly with random usernames and passwords.</p>
+                    <a href="#" class="btn" data-page="account-gen">Use Tool</a>
+                </div>
+                
+                <div class="tool-card">
+                    <h3>Nitro Type Team Data</h3>
+                    <p>Displays Nitro Type Team data on this website with the ability to sort accounts.</p>
+                    <a href="#" class="btn" data-page="tool1">(Upcoming Tool)</a>
+                </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Account Generator Page -->
+        <div class="page" id="account-gen">
+            <h1>Account Generator</h1>
+            <p>Create multiple Nitro Type accounts with random credentials.</p>
+            
+            <div class="card">
+                <div class="form-group">
+                    <label for="baseUsername">Base Username (optional):</label>
+                    <input type="text" id="baseUsername" placeholder="e.g. racer" maxlength="15">
+                    <small>Will become racer_1, racer_2, etc. (max 20 chars total)</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="basePassword">Base Password (optional):</label>
+                    <input type="text" id="basePassword" placeholder="e.g. speed" maxlength="10">
+                    <small>Will become speed_A3b! etc. (max 20 chars total)</small>
+                </div>
+                <div class="form-group">
+                    <label for="accountCount">Number of Accounts:</label>
+                    <input type="number" id="accountCount" min="1" max="20" value="5">
+                </div>
+                
+                <div class="form-group">
+                    <label for="wpm">Typing Speed (WPM):</label>
+                    <input type="number" id="wpm" min="30" max="150" value="80">
+                </div>
+                
+                <button id="generateBtn" class="btn btn-block">Generate Accounts</button>
+                
+                <div id="response" class="alert" style="display: none;"></div>
+                <div id="accountsList"></div>
+            </div>
+        </div>
+        
+        <!-- Team Data Display -->
+        <div class="page" id="tool1">
+            <h1>Nitro Type Team Data</h1>
+            <p>Enter a team tag to view detailed member statistics.</p>
+        </div>
+         
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 OneNitroX All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>
