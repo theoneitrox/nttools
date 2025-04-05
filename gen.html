@@ -15,6 +15,7 @@
                     <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
                     <li><a href="#" class="nav-link" data-page="account-gen">Account Generator</a></li>
                     <li><a href="#" class="nav-link" data-page="tool1">Nitro Type Team Data</a></li>
+                    <li><a href="#" class="nav-link" data-page="available-tags">Available NT Team Tags</a></li>
                 </ul>
             </nav>
         </div>
@@ -82,7 +83,34 @@
         <div class="page" id="tool1">
             <h1>Nitro Type Team Data</h1>
             <p>Enter a team tag to view detailed member statistics.</p>
+            <p>This tool is estimated to release on April 17th 2025.</p>
         </div>
+
+        <!-- Avaliable Tag Display-->
+<div class="page" id="available-tags">
+    <h1>Nitro Type Available Team Tags</h1>
+    <p>List of all available 2-letter and 3-letter team tags.</p>
+    
+    <div class="card">
+        <div class="last-updated">
+            <div>2-letter tags last updated: <span id="update-date-2">Not loaded yet</span></div>
+            <div>3-letter tags last updated: <span id="update-date-3">Not loaded yet</span></div>
+        </div>
+        
+        <div class="form-group">
+            <label for="tagFilter">Filter Tags:</label>
+            <input type="text" id="tagFilter" placeholder="Type to filter tags...">
+        </div>
+        
+        <div class="tag-container">
+            <h3>2-Letter Tags</h3>
+            <div id="twoLetterTags" class="tags-grid"></div>
+            
+            <h3>3-Letter Tags</h3>
+            <div id="threeLetterTags" class="tags-grid"></div>
+        </div>
+    </div>
+</div>
          
     <footer>
         <div class="container">
