@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Generator | OneNitroX</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-robot"></i> OneNitroX
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="account-gen.html" class="nav-link active"><i class="fas fa-user-plus"></i> Account Gen</a></li>
+                    <li><a href="team-data.html" class="nav-link"><i class="fas fa-users"></i> Team Data</a></li>
+                    <li><a href="available-tags.html" class="nav-link"><i class="fas fa-tags"></i> Tags</a></li>
+                    <li><a href="updates.html" class="nav-link"><i class="fas fa-history"></i> Updates</a></li>
+                    <li><a href="about.html" class="nav-link"><i class="fas fa-info-circle"></i> About</a></li>
+                </ul>
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <h1 class="page-title"><i class="fas fa-user-plus"></i> Account Generator</h1>
+        
+        <div class="card animated-card">
+            <div class="form-group">
+                <label for="baseUsername"><i class="fas fa-user"></i> Base Username (optional):</label>
+                <input type="text" id="baseUsername" placeholder="e.g. racer" maxlength="15">
+                <small>Output: racer_1, racer_2, etc. (max 15 chars input)</small>
+            </div>
+
+            <div class="form-group">
+                <label for="basePassword"><i class="fas fa-lock"></i> Base Password (optional):</label>
+                <input type="text" id="basePassword" placeholder="e.g. speed" maxlength="10">
+                <small>Output: speed_A3b! etc. (max 10 chars input)</small>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="accountCount"><i class="fas fa-copy"></i> Number of Accounts:</label>
+                    <input type="number" id="accountCount" min="1" max="20" value="5">
+                </div>
+                
+                <div class="form-group">
+                    <label for="wpm"><i class="fas fa-tachometer-alt"></i> Typing Speed (WPM):</label>
+                    <input type="number" id="wpm" min="30" max="150" value="80">
+                </div>
+            </div>
+            
+            <button id="generateBtn" class="btn btn-primary btn-block">
+                <i class="fas fa-magic"></i> Generate Accounts
+            </button>
+            
+            <div id="response" class="alert" style="display: none;"></div>
+            <div id="accountsList"></div>
+        </div>
+        
+        <div class="info-card">
+            <h3><i class="fas fa-lightbulb"></i> Pro Tips</h3>
+            <ul>
+                <li>Use simple base usernames for easy management</li>
+                <li>Generate 5-10 accounts at a time for best results</li>
+                <li>Set WPM between 70-120 for realistic accounts</li>
+            </ul>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 OneNitroX. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>

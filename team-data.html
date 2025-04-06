@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Data | OneNitroX</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-robot"></i> OneNitroX
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="account-gen.html" class="nav-link"><i class="fas fa-user-plus"></i> Account Gen</a></li>
+                    <li><a href="team-data.html" class="nav-link active"><i class="fas fa-users"></i> Team Data</a></li>
+                    <li><a href="available-tags.html" class="nav-link"><i class="fas fa-tags"></i> Tags</a></li>
+                    <li><a href="updates.html" class="nav-link"><i class="fas fa-history"></i> Updates</a></li>
+                    <li><a href="about.html" class="nav-link"><i class="fas fa-info-circle"></i> About</a></li>
+                </ul>
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <h1 class="page-title"><i class="fas fa-users"></i> Team Data Analytics (COMING SOON)</h1>
+        
+        <div class="card animated-card">
+            <div class="form-group">
+                <label for="teamTag"><i class="fas fa-tag"></i> Enter Team Tag: Doesn't work yet :( </label>
+                <input type="text" id="teamTag" placeholder="e.g. ABC" maxlength="3">
+                <button id="fetchTeamData" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Analyze Team
+                </button>
+            </div>
+            
+            <div class="loading-spinner" id="loadingSpinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Fetching team data...</p>
+            </div>
+            
+            <div id="teamDataResults"></div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 OneNitroX. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>

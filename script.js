@@ -1,70 +1,49 @@
 // ======================
-// PAGE NAVIGATION SYSTEM
+// INITIALIZATION
 // ======================
-
-// Initialize page navigation
-function initNavigation() {
-    // Handle nav link clicks
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const pageId = this.getAttribute('data-page');
-            switchPage(pageId);
-        });
-    });
-
-    // Handle tool button clicks
-    document.querySelectorAll('.tool-card .btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const pageId = this.getAttribute('data-page');
-            switchPage(pageId);
-        });
-    });
-
-    // Switch to initial page if hash exists
-    if (window.location.hash) {
-        const pageId = window.location.hash.substring(1);
-        if (document.getElementById(pageId)) {
-            switchPage(pageId);
-        }
-    }
-}
-
-// Switch between pages
-function switchPage(pageId) {
-    console.log(`Switching to page: ${pageId}`);
-
-    // Update active nav link
-    document.querySelectorAll('.nav-link').forEach(navLink => {
-        navLink.classList.remove('active');
-        if (navLink.getAttribute('data-page') === pageId) {
-            navLink.classList.add('active');
-        }
-    });
-
-    // Update active page
-    document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-    });
-    document.getElementById(pageId).classList.add('active');
-
-    // Load content for specific pages
-    if (pageId === 'available-tags') {
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('OneNitroX Tools Initialized');
+    
+    // Initialize all systems
+    initMobileMenu();
+    initAccountGenerator();
+    initTagFiltering();
+    initVideoCards();
+    
+    // Check if we need to load tags
+    if (document.querySelector('.page#available-tags')) {
         loadTeamTags();
     }
+    
+    // Add animations when elements come into view
+    initScrollAnimations();
+});
 
-    // Update URL hash
-    window.location.hash = pageId;
+// ======================
+// MOBILE MENU
+// ======================
+function initMobileMenu() {
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (menuBtn && navLinks) {
+        menuBtn.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            this.querySelector('i').classList.toggle('fa-bars');
+            this.querySelector('i').classList.toggle('fa-times');
+        });
+    }
 }
 
 // ======================
-// ACCOUNT GENERATOR SYSTEM
+// ACCOUNT GENERATOR
 // ======================
-
-// Initialize account generator
 function initAccountGenerator() {
-    document.getElementById('generateBtn').addEventListener('click', generateAccounts);
+    const generateBtn = document.getElementById('generateBtn');
+    
+    if (generateBtn) {
+        generateBtn.addEventListener('click', generateAccounts);
+    }
 }
 
 // Generate random string
@@ -86,11 +65,11 @@ function generateRandomString(length, includeSymbols = true) {
 // Validate inputs
 function validateBaseInputs(baseUsername, basePassword) {
     if (baseUsername && baseUsername.length > 15) {
-        alert("Base username too long! Maximum 15 characters.");
+        showAlert('Base username too long! Maximum 15 characters.', 'danger');
         return false;
     }
     if (basePassword && basePassword.length > 10) {
-        alert("Base password too long! Maximum 10 characters.");
+        showAlert('Base password too long! Maximum 10 characters.', 'danger');
         return false;
     }
     return true;
@@ -122,6 +101,28 @@ function generatePassword(base) {
     }
     const suffix = generateRandomString(availableLength);
     return `${base}${suffix}`;
+}
+
+// Show alert message
+function showAlert(message, type = 'info') {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type}`;
+    alertDiv.innerHTML = message;
+    
+    const responseDiv = document.getElementById('response');
+    if (responseDiv) {
+        responseDiv.innerHTML = '';
+        responseDiv.appendChild(alertDiv);
+        responseDiv.style.display = 'block';
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            alertDiv.style.opacity = '0';
+            setTimeout(() => {
+                responseDiv.style.display = 'none';
+            }, 300);
+        }, 5000);
+    }
 }
 
 // Create account via API
@@ -179,8 +180,7 @@ async function generateAccounts() {
     
     // Show loading state
     responseDiv.style.display = 'block';
-    responseDiv.innerHTML = "Generating accounts...";
-    responseDiv.className = "alert";
+    responseDiv.innerHTML = '<div class="alert"><i class="fas fa-spinner fa-spin"></i> Generating accounts...</div>';
     accountsList.innerHTML = "";
     
     let successfulAccounts = [];
@@ -212,7 +212,7 @@ async function generateAccounts() {
 
             // Update progress
             const processed = Math.min(i + BATCH_SIZE, accountCount);
-            responseDiv.innerHTML = `Generating accounts... (${processed}/${accountCount} completed)`;
+            responseDiv.innerHTML = `<div class="alert"><i class="fas fa-spinner fa-spin"></i> Generating accounts... (${processed}/${accountCount} completed)</div>`;
             
             // Add delay between batches
             if (i + BATCH_SIZE < accountPromises.length) {
@@ -223,17 +223,20 @@ async function generateAccounts() {
         // Display results
         if (successfulAccounts.length > 0) {
             accountsList.innerHTML = `
-                <h3>Successfully Created Accounts (${successfulAccounts.length})</h3>
+                <h3><i class="fas fa-check-circle"></i> Successfully Created Accounts (${successfulAccounts.length})</h3>
                 <div class="alert alert-success">
                     <p>${successfulAccounts.length} accounts created successfully!</p>
                 </div>
                 <pre>${successfulAccounts.join('\n')}</pre>
+                <button class="btn btn-small copy-btn" data-text="${successfulAccounts.join('\n')}">
+                    <i class="fas fa-copy"></i> Copy to Clipboard
+                </button>
             `;
         }
         
         if (failedAccounts.length > 0) {
             accountsList.innerHTML += `
-                <h3>Failed Accounts (${failedAccounts.length})</h3>
+                <h3><i class="fas fa-times-circle"></i> Failed Accounts (${failedAccounts.length})</h3>
                 <div class="alert alert-danger">
                     <p>${failedAccounts.length} accounts failed to create.</p>
                 </div>
@@ -243,20 +246,36 @@ async function generateAccounts() {
         }
         
         // Final status
-        responseDiv.innerHTML = `Completed! ${successfulAccounts.length} succeeded, ${failedAccounts.length} failed.`;
-        responseDiv.className = successfulAccounts.length > 0 ? "alert alert-success" : "alert alert-danger";
+        responseDiv.innerHTML = `<div class="alert ${successfulAccounts.length > 0 ? 'alert-success' : 'alert-danger'}">
+            <i class="fas ${successfulAccounts.length > 0 ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+            Completed! ${successfulAccounts.length} succeeded, ${failedAccounts.length} failed.
+        </div>`;
+        
+        // Initialize copy buttons
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const text = this.getAttribute('data-text');
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                    }, 2000);
+                });
+            });
+        });
         
     } catch (error) {
-        responseDiv.innerHTML = `Error during account generation: ${error.message}`;
-        responseDiv.className = "alert alert-danger";
+        responseDiv.innerHTML = `<div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i>
+            Error during account generation: ${error.message}
+        </div>`;
     }
 }
 
 // ======================
 // TEAM TAGS SYSTEM
 // ======================
-
-// Team tags configuration
 const TAGS_CONFIG = {
     batchSize: 500,
     renderDelay: 50,
@@ -268,8 +287,8 @@ async function loadTeamTags() {
     console.log('Loading team tags...');
     
     // Show loading state
-    document.getElementById('twoLetterTags').innerHTML = '<div class="alert alert-info">Loading 2-letter tags...</div>';
-    document.getElementById('threeLetterTags').innerHTML = '<div class="alert alert-info">Loading 3-letter tags...</div>';
+    document.getElementById('twoLetterTags').innerHTML = '<div class="alert alert-info"><i class="fas fa-spinner fa-spin"></i> Loading 2-letter tags...</div>';
+    document.getElementById('threeLetterTags').innerHTML = '<div class="alert alert-info"><i class="fas fa-spinner fa-spin"></i> Loading 3-letter tags...</div>';
     
     try {
         // Load both files simultaneously
@@ -294,6 +313,7 @@ async function loadTeamTags() {
         console.error('Error loading tags:', error);
         document.getElementById('twoLetterTags').innerHTML = `
             <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i>
                 Failed to load tags: ${error.message}<br>
                 <button onclick="loadTeamTags()" class="btn btn-sm btn-danger">Retry</button>
             </div>`;
@@ -317,7 +337,7 @@ function displayTagsWithVirtualScroll(containerId, tags) {
     container.innerHTML = '';
     
     if (!tags || tags.length === 0) {
-        container.innerHTML = '<div class="alert alert-warning">No tags available</div>';
+        container.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-circle"></i> No tags available</div>';
         return;
     }
     
@@ -365,33 +385,79 @@ function renderTagBatch(window, viewport, tags, startIdx) {
 }
 
 // Setup tag filtering
-function setupTagFiltering(twoLetterTags, threeLetterTags) {
+function initTagFiltering() {
     const filterInput = document.getElementById('tagFilter');
+    if (!filterInput) return;
     
     filterInput.addEventListener('input', function() {
         const filter = this.value.trim().toUpperCase();
+        const twoLetterTags = document.getElementById('twoLetterTags');
+        const threeLetterTags = document.getElementById('threeLetterTags');
         
-        const filteredTwoLetter = twoLetterTags.filter(tag => tag.includes(filter));
-        const filteredThreeLetter = threeLetterTags.filter(tag => tag.includes(filter));
+        if (twoLetterTags) {
+            const tags = twoLetterTags.querySelectorAll('.tag-item');
+            tags.forEach(tag => {
+                tag.style.display = tag.textContent.includes(filter) ? 'block' : 'none';
+            });
+        }
         
-        displayTagsWithVirtualScroll('twoLetterTags', filteredTwoLetter);
-        displayTagsWithVirtualScroll('threeLetterTags', filteredThreeLetter);
+        if (threeLetterTags) {
+            const tags = threeLetterTags.querySelectorAll('.tag-item');
+            tags.forEach(tag => {
+                tag.style.display = tag.textContent.includes(filter) ? 'block' : 'none';
+            });
+        }
     });
 }
 
 // ======================
-// INITIALIZATION
+// VIDEO CARDS
 // ======================
+function initVideoCards() {
+    const videoCards = document.querySelectorAll('.video-card');
+    
+    videoCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            if (!e.target.closest('a')) {
+                // In a real implementation, this would open the video
+                console.log('Opening video:', this.querySelector('h3').textContent);
+            }
+        });
+    });
+}
 
-// Initialize all systems when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Initializing application...');
+// ======================
+// SCROLL ANIMATIONS
+// ======================
+function initScrollAnimations() {
+    const animatedElements = document.querySelectorAll('.animated-card, .feature-card, .timeline-item');
     
-    initNavigation();
-    initAccountGenerator();
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
     
-    // Load tags if on that page initially
-    if (document.getElementById('available-tags').classList.contains('active')) {
-        loadTeamTags();
-    }
-});
+    animatedElements.forEach(el => {
+        observer.observe(el);
+    });
+}
+
+// ======================
+// UTILITY FUNCTIONS
+// ======================
+function debounce(func, wait) {
+    let timeout;
+    return function() {
+        const context = this, args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            func.apply(context, args);
+        }, wait);
+    };
+}

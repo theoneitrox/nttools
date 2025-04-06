@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Tags | OneNitroX</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <i class="fas fa-robot"></i> OneNitroX
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="account-gen.html" class="nav-link"><i class="fas fa-user-plus"></i> Account Gen</a></li>
+                    <li><a href="team-data.html" class="nav-link"><i class="fas fa-users"></i> Team Data</a></li>
+                    <li><a href="available-tags.html" class="nav-link active"><i class="fas fa-tags"></i> Tags</a></li>
+                    <li><a href="updates.html" class="nav-link"><i class="fas fa-history"></i> Updates</a></li>
+                    <li><a href="about.html" class="nav-link"><i class="fas fa-info-circle"></i> About</a></li>
+                </ul>
+                <div class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <h1 class="page-title"><i class="fas fa-tags"></i> Available Team Tags</h1>
+        
+        <div class="card animated-card">
+            <div class="last-updated">
+                <div><i class="fas fa-sync-alt"></i> 2-letter tags last updated: <span id="update-date-2">Loading...</span></div>
+                <div><i class="fas fa-sync-alt"></i> 3-letter tags last updated: <span id="update-date-3">Loading...</span></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="tagFilter"><i class="fas fa-filter"></i> Filter Tags:</label>
+                <input type="text" id="tagFilter" placeholder="Type to filter tags...">
+            </div>
+            
+            <div class="tag-container">
+                <h3><i class="fas fa-hashtag"></i> 2-Letter Tags</h3>
+                <div id="twoLetterTags" class="tags-grid">
+                    <div class="alert alert-info">
+                        <i class="fas fa-spinner fa-spin"></i> Loading 2-letter tags...
+                    </div>
+                </div>
+                
+                <h3><i class="fas fa-hashtag"></i> 3-Letter Tags</h3>
+                <div id="threeLetterTags" class="tags-grid">
+                    <div class="alert alert-info">
+                        <i class="fas fa-spinner fa-spin"></i> Loading 3-letter tags...
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-card">
+            <h3><i class="fas fa-question-circle"></i> How to Claim Tags</h3>
+            <ol>
+                <li>Find an available tag from the list</li>
+                <li>Create a new team in Nitro Type</li>
+                <li>Enter the tag when prompted</li>
+                <li>Complete the team creation process</li>
+            </ol>
+            <p>Tags are first-come, first-served!</p>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 OneNitroX. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>
