@@ -196,7 +196,7 @@ async function generateAccounts() {
     
     // Process in batches
     try {
-        const BATCH_SIZE = 5;
+        const BATCH_SIZE = 20;
         for (let i = 0; i < accountPromises.length; i += BATCH_SIZE) {
             const batch = accountPromises.slice(i, i + BATCH_SIZE);
             const batchResults = await Promise.allSettled(batch);
