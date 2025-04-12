@@ -31,7 +31,13 @@
     
     <main class="container">
         <h1 class="page-title"><i class="fas fa-user-plus"></i> Account Generator</h1>
-        
+        <div class="form-group">
+            <label for="usernameType"><i class="fas fa-random"></i> Username Type:</label>
+            <select id="usernameType" class="form-control">
+                <option value="random">Random Letters/Numbers</option>
+                <option value="words">Combined Words + Numbers</option>
+            </select>
+        </div>
         <div class="card animated-card">
             <div class="form-group">
                 <label for="baseUsername"><i class="fas fa-user"></i> Base Username (optional):</label>

@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
     initTagFiltering();
     initVideoCards();
     
+    // Load word list for account generator
+    loadWordList();
+    
     // Check if we need to load tags
     if (document.querySelector('.page#available-tags')) {
         loadTeamTags();
@@ -18,6 +21,31 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add animations when elements come into view
     initScrollAnimations();
 });
+
+// ======================
+// WORD LIST MANAGEMENT
+// ======================
+let WORD_LIST = [];
+
+// Load words from text file
+async function loadWordList() {
+    try {
+        const response = await fetch('words.txt?v=' + Date.now()); // Cache bust
+        if (!response.ok) throw new Error('Failed to load words');
+        const text = await response.text();
+        WORD_LIST = text.split('\n')
+            .map(word => word.trim().toLowerCase())
+            .filter(word => word.length > 0);
+        
+        if (WORD_LIST.length === 0) {
+            console.warn('Word list is empty, falling back to default words');
+            WORD_LIST = ['racer', 'speed', 'fast', 'typer', 'key', 'board', 'nitro'];
+        }
+    } catch (error) {
+        console.error('Error loading word list:', error);
+        WORD_LIST = ['racer', 'speed', 'fast', 'typer', 'key', 'board', 'nitro'];
+    }
+}
 
 // ======================
 // MOBILE MENU
@@ -76,8 +104,13 @@ function validateBaseInputs(baseUsername, basePassword) {
 }
 
 // Generate username
-function generateUsername(base, index) {
-    if (!base) return generateRandomString(6 + Math.floor(Math.random() * 7), false);
+function generateUsername(base, index, type = 'random') {
+    if (!base) {
+        if (type === 'words') {
+            return generateWordBasedUsername();
+        }
+        return generateRandomString(6 + Math.floor(Math.random() * 7), false);
+    }
     
     const suffix = `_${index}`;
     const maxBaseLength = 20 - suffix.length;
@@ -85,9 +118,41 @@ function generateUsername(base, index) {
     
     if (finalUsername.length > 20) {
         console.warn(`Generated username too long: ${finalUsername}`);
-        return generateRandomString(10, false);
+        return type === 'words' ? generateWordBasedUsername() : generateRandomString(10, false);
     }
     return finalUsername;
+}
+
+function generateWordBasedUsername() {
+    if (WORD_LIST.length === 0) {
+        console.warn('Word list not loaded, using random string instead');
+        return generateRandomString(8 + Math.floor(Math.random() * 5), false);
+    }
+    
+    // Get 2-3 random words
+    const wordCount = 2 + Math.floor(Math.random() * 2);
+    let words = [];
+    
+    for (let i = 0; i < wordCount; i++) {
+        const randomIndex = Math.floor(Math.random() * WORD_LIST.length);
+        words.push(WORD_LIST[randomIndex]);
+    }
+    
+    // Combine words and add some numbers
+    let username = words.join('');
+    
+    // Add 1-3 numbers at the end
+    const numCount = 1 + Math.floor(Math.random() * 3);
+    for (let i = 0; i < numCount; i++) {
+        username += Math.floor(Math.random() * 10);
+    }
+    
+    // Ensure it's not too long
+    if (username.length > 20) {
+        username = username.substring(0, 20);
+    }
+    
+    return username;
 }
 
 // Generate password
@@ -173,6 +238,7 @@ async function generateAccounts() {
     const wpm = document.getElementById('wpm').value;
     const baseUsername = document.getElementById('baseUsername').value.trim();
     const basePassword = document.getElementById('basePassword').value.trim();
+    const usernameType = document.getElementById('usernameType').value;
     const responseDiv = document.getElementById('response');
     const accountsList = document.getElementById('accountsList');
     
@@ -189,14 +255,13 @@ async function generateAccounts() {
     
     // Create account promises
     for (let i = 0; i < accountCount; i++) {
-        const username = generateUsername(baseUsername, i+1);
+        const username = generateUsername(baseUsername, i+1, usernameType);
         const password = generatePassword(basePassword);
         accountPromises.push(createAccount(username, password, wpm));
     }
-    
-    // Process in batches
+
     try {
-        const BATCH_SIZE = 20;
+        const BATCH_SIZE = 50;
         for (let i = 0; i < accountPromises.length; i += BATCH_SIZE) {
             const batch = accountPromises.slice(i, i + BATCH_SIZE);
             const batchResults = await Promise.allSettled(batch);
