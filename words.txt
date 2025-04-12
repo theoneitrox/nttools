@@ -244,7 +244,6 @@ demonic
 camp
 temporary
 coil
-passenger
 appliance
 clam
 smoggy
@@ -386,7 +385,6 @@ mammoth
 cloth
 honey
 frame
-brass
 price
 transport
 eyes
@@ -399,7 +397,6 @@ front
 refuse
 striped
 instrument
-far-flung
 tremendous
 push
 wonder
@@ -457,7 +454,6 @@ maddening
 teaching
 whirl
 wire
-ruddy
 miss
 living
 sigh
@@ -519,7 +515,6 @@ settle
 fit
 vessel
 parched
-extra-large
 desire
 practise
 terrific
@@ -567,7 +562,6 @@ cable
 insurance
 complain
 wholesale
-harass
 confess
 attempt
 cast
@@ -676,18 +670,15 @@ tasty
 scratch
 humorous
 regular
-teeny-tiny
 glistening
 cabbage
 fat
 wriggle
 writing
-class
 fang
 crack
 homely
 vacation
-hellish
 wretched
 trick
 truculent
@@ -749,7 +740,6 @@ church
 rob
 orange
 grease
-wide-eyed
 spark
 radiate
 pause
@@ -883,9 +873,7 @@ present
 painful
 friction
 company
-classy
 condition
-blue-eyed
 blush
 discussion
 worry
@@ -1088,7 +1076,6 @@ old
 rabid
 war
 icicle
-ill-informed
 selection
 worm
 pushy
@@ -1131,7 +1118,6 @@ offer
 quizzical
 suffer
 brief
-embarrassed
 graceful
 fluttering
 bike
@@ -1503,7 +1489,6 @@ fence
 hover
 mountainous
 peel
-black-and-white
 borrow
 subtract
 oatmeal
@@ -1520,7 +1505,6 @@ luxuriant
 lovely
 deserve
 five
-old-fashioned
 scientific
 lively
 pet
@@ -1528,7 +1512,6 @@ comfortable
 laugh
 hungry
 chance
-bite-sized
 combative
 protective
 beef
@@ -1603,13 +1586,11 @@ equal
 group
 bizarre
 spotted
-embarrass
 produce
 womanly
 spectacular
 agonizing
 cows
-suck
 ritzy
 hole
 sail
@@ -1671,7 +1652,6 @@ cooing
 familiar
 train
 coal
-second-hand
 good
 grey
 zinc
@@ -1751,7 +1731,6 @@ grubby
 ossified
 domineering
 daughter
-grass
 plate
 grin
 yummy
@@ -1800,7 +1779,6 @@ enthusiastic
 truthful
 tip
 measly
-extra-small
 stingy
 retire
 marble
@@ -1852,7 +1830,6 @@ value
 jumpy
 live
 inquisitive
-high-pitched
 threatening
 handsome
 chin
@@ -1945,7 +1922,6 @@ wander
 damp
 tumble
 exchange
-x-ray
 rate
 call
 wary
@@ -1958,7 +1934,6 @@ driving
 inconclusive
 silver
 crime
-assorted
 mere
 false
 support
@@ -2027,10 +2002,8 @@ purple
 wink
 jail
 pointless
-glass
 spare
 narrow
-hard-to-find
 expert
 committee
 meat
@@ -2060,7 +2033,6 @@ bit
 cough
 glib
 tense
-mass
 wine
 plantation
 compare
@@ -2098,7 +2070,6 @@ coast
 hand
 sofa
 sense
-ill-fated
 pizzas
 recondite
 leg
@@ -2117,7 +2088,6 @@ library
 itchy
 duck
 knowledge
-well-groomed
 buzz
 wait
 puffy
@@ -2129,7 +2099,6 @@ purring
 stage
 ghost
 grandfather
-long-term
 cattle
 itch
 rock
@@ -2143,7 +2112,6 @@ nerve
 mine
 exultant
 messy
-well-made
 maid
 jolly
 prose
@@ -2169,7 +2137,6 @@ hollow
 kitty
 closed
 face
-well-to-do
 tin
 overconfident
 powder
@@ -2262,7 +2229,6 @@ symptomatic
 ice
 endurable
 sponge
-massive
 adjustment
 servant
 absorbing
@@ -2314,7 +2280,6 @@ trick
 organic
 shut
 stupid
-well-off
 frequent
 intend
 bird
@@ -2389,7 +2354,6 @@ colour
 dirt
 stocking
 cheerful
-sassy
 scream
 eggnog
 odd
@@ -2499,7 +2463,6 @@ phone
 blow
 godly
 hulking
-pass
 concern
 suspect
 water
@@ -2551,7 +2514,6 @@ fact
 panoramic
 trucks
 cold
-murder
 cultured
 cynical
 quiet
