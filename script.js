@@ -341,42 +341,29 @@ async function generateAccounts() {
 // ======================
 // TEAM TAGS SYSTEM
 // ======================
-const TAGS_CONFIG = {
-    batchSize: 500,
-    renderDelay: 50,
-    cacheDuration: 24 * 60 * 60 * 1000 // 24 hours
-};
 
-// Load team tags
 async function loadTeamTags() {
     console.log('Loading team tags...');
     
     // Show loading state
-    document.getElementById('twoLetterTags').innerHTML = '<div class="alert alert-info"><i class="fas fa-spinner fa-spin"></i> Loading 2-letter tags...</div>';
-    document.getElementById('threeLetterTags').innerHTML = '<div class="alert alert-info"><i class="fas fa-spinner fa-spin"></i> Loading 3-letter tags...</div>';
+    document.getElementById('tags').innerHTML = '<div class="alert alert-info"><i class="fas fa-spinner fa-spin"></i> Loading tags...</div>';
     
     try {
-        // Load both files simultaneously
-        const [twoLetterTags, threeLetterTags] = await Promise.all([
-            loadTagFile('2lettertags.txt', 2),
-            loadTagFile('3lettertags.txt', 3)
-        ]);
+        const tags = await loadTagFile('2lettertags.txt');
         
         // Update last loaded time
         const now = new Date();
-        document.getElementById('update-date-2').textContent = now.toLocaleString();
-        document.getElementById('update-date-3').textContent = now.toLocaleString();
+        document.getElementById('update-date').textContent = now.toLocaleString();
         
-        // Display tags with virtual scrolling
-        displayTagsWithVirtualScroll('twoLetterTags', twoLetterTags);
-        displayTagsWithVirtualScroll('threeLetterTags', threeLetterTags);
+        // Display tags
+        displayTags('tags', tags);
         
         // Setup filtering
-        setupTagFiltering(twoLetterTags, threeLetterTags);
+        setupTagFiltering(tags);
         
     } catch (error) {
         console.error('Error loading tags:', error);
-        document.getElementById('twoLetterTags').innerHTML = `
+        document.getElementById('tags').innerHTML = `
             <div class="alert alert-danger">
                 <i class="fas fa-exclamation-triangle"></i>
                 Failed to load tags: ${error.message}<br>
@@ -386,18 +373,18 @@ async function loadTeamTags() {
 }
 
 // Load individual tag file
-async function loadTagFile(filename, expectedLength) {
+async function loadTagFile(filename) {
     const response = await fetch(`${filename}?v=${Date.now()}`); // Cache bust
     if (!response.ok) throw new Error(`Failed to load ${filename}: ${response.status}`);
     
     const text = await response.text();
     return text.split('\n')
         .map(tag => tag.trim().toUpperCase())
-        .filter(tag => tag.length === expectedLength);
+        .filter(tag => tag.length === 2);
 }
 
-// Display tags with virtual scrolling
-function displayTagsWithVirtualScroll(containerId, tags) {
+// Display tags
+function displayTags(containerId, tags) {
     const container = document.getElementById(containerId);
     container.innerHTML = '';
     
@@ -406,74 +393,49 @@ function displayTagsWithVirtualScroll(containerId, tags) {
         return;
     }
     
-    // Create viewport
-    const viewport = document.createElement('div');
-    viewport.className = 'tags-viewport';
-    viewport.style.height = `${Math.ceil(tags.length / 4) * 30}px`; // Approximate height
-    
-    // Create visible window
-    const window = document.createElement('div');
-    window.className = 'tags-window';
-    window.style.height = '500px';
-    window.style.overflow = 'auto';
-    
-    // Render initial batch
-    renderTagBatch(window, viewport, tags, 0);
-    
-    // Handle scrolling
-    window.addEventListener('scroll', () => {
-        const scrollPos = window.scrollTop;
-        const startIdx = Math.floor(scrollPos / 30);
-        renderTagBatch(window, viewport, tags, startIdx);
+    tags.forEach(tag => {
+        const tagElement = document.createElement('div');
+        tagElement.className = 'tag-item';
+        tagElement.textContent = tag;
+        container.appendChild(tagElement);
     });
-    
-    window.appendChild(viewport);
-    container.appendChild(window);
-}
-
-// Render a batch of tags
-function renderTagBatch(window, viewport, tags, startIdx) {
-    const endIdx = Math.min(startIdx + TAGS_CONFIG.batchSize, tags.length);
-    
-    // Clear existing tags
-    viewport.innerHTML = '';
-    
-    // Render visible tags
-    for (let i = startIdx; i < endIdx; i++) {
-        const tag = document.createElement('div');
-        tag.className = 'tag-item';
-        tag.textContent = tags[i];
-        tag.style.position = 'absolute';
-        tag.style.top = `${i * 30}px`;
-        viewport.appendChild(tag);
-    }
 }
 
 // Setup tag filtering
-function initTagFiltering() {
+function setupTagFiltering(tags) {
     const filterInput = document.getElementById('tagFilter');
     if (!filterInput) return;
     
     filterInput.addEventListener('input', function() {
         const filter = this.value.trim().toUpperCase();
-        const twoLetterTags = document.getElementById('twoLetterTags');
-        const threeLetterTags = document.getElementById('threeLetterTags');
+        const tagElements = document.querySelectorAll('.tag-item');
         
-        if (twoLetterTags) {
-            const tags = twoLetterTags.querySelectorAll('.tag-item');
-            tags.forEach(tag => {
-                tag.style.display = tag.textContent.includes(filter) ? 'block' : 'none';
-            });
-        }
-        
-        if (threeLetterTags) {
-            const tags = threeLetterTags.querySelectorAll('.tag-item');
-            tags.forEach(tag => {
-                tag.style.display = tag.textContent.includes(filter) ? 'block' : 'none';
-            });
-        }
+        tagElements.forEach(tag => {
+            tag.style.display = tag.textContent.includes(filter) ? 'block' : 'none';
+        });
     });
 }
+
+// Update the initialization to only load tags when on the tags page
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('OneNitroX Tools Initialized');
+    
+    // Initialize all systems
+    initMobileMenu();
+    initAccountGenerator();
+    initVideoCards();
+    
+    // Load word list for account generator
+    loadWordList();
+    
+    // Check if we need to load tags
+    if (document.querySelector('h1.page-title i.fa-tags')) {
+        loadTeamTags();
+    }
+    
+    // Add animations when elements come into view
+    initScrollAnimations();
+});
 
 // ======================
 // VIDEO CARDS
