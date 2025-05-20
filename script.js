@@ -344,23 +344,33 @@ async function generateAccounts() {
 
 async function loadTeamTags() {
     console.log('Loading team tags...');
-    
-    // Show loading state
+
     document.getElementById('tags').innerHTML = '<div class="alert alert-info"><i class="fas fa-spinner fa-spin"></i> Loading tags...</div>';
-    
+
     try {
-        const tags = await loadTagFile('2lettertags.txt');
-        
-        // Update last loaded time
-        const now = new Date();
-        document.getElementById('update-date').textContent = now.toLocaleString();
-        
-        // Display tags
+        const lines = await loadTagFile('2lettertags.txt');
+        console.log('Loaded lines:', lines);
+
+
+        if (!Array.isArray(lines)) {
+            throw new Error('Tag file is not an array of lines');
+        }
+
+        console.log('Parsed lines:', lines);
+
+        const updateLine = lines[0];
+        const tags = lines.slice(1);
+
+        // Display the first line as update date text exactly as it is
+        document.getElementById('update-date').textContent = updateLine;
+
+        console.log('Update line:', updateLine);
+        console.log('Tags array:', tags);
+        console.log('Tags:', tags);
+
         displayTags('tags', tags);
-        
-        // Setup filtering
         setupTagFiltering(tags);
-        
+
     } catch (error) {
         console.error('Error loading tags:', error);
         document.getElementById('tags').innerHTML = `
@@ -380,7 +390,6 @@ async function loadTagFile(filename) {
     const text = await response.text();
     return text.split('\n')
         .map(tag => tag.trim().toUpperCase())
-        .filter(tag => tag.length === 2);
 }
 
 // Display tags
